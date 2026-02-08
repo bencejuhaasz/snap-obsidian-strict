@@ -1,0 +1,68 @@
+name: obsidian-strict
+base: core24
+version: '1.11.7'
+summary: Obsidian Markdown knowledge base
+description: |
+  Strictly confined Obsidian Snap.
+
+grade: stable
+confinement: strict
+
+title: Obsidian (strict)
+license: Proprietary
+website: https://obsidian.md
+contact: https://obsidian.md
+source-code: https://github.com/obsidianmd/obsidian-releases
+issues: https://forum.obsidian.md
+
+apps:
+  obsidian:
+    command: obsidian --no-sandbox --disable-gpu-sandbox --disable-dev-shm-usage
+    desktop: obsidian.desktop
+    extensions:
+      - gnome
+    environment:
+      ELECTRON_NO_SANDBOX: "1"
+    plugs:
+      - home
+      - network
+      - network-bind
+      - opengl
+      - wayland
+      - x11
+      - desktop
+      - desktop-legacy
+      - audio-playback
+      - pulseaudio
+      - removable-media
+
+parts:
+  obsidian:
+    plugin: nil
+    source: squashfs-root
+    source-type: local
+    override-build: |
+      set -eux
+      mkdir -p "$SNAPCRAFT_PART_INSTALL"
+      cp -a . "$SNAPCRAFT_PART_INSTALL/"
+      chmod -R a+rX "$SNAPCRAFT_PART_INSTALL"
+    stage-packages:
+      - libnss3
+      - libxss1
+      - libasound2
+      - libpulse0
+      - libgbm1
+      - libgtk-3-0
+      - libdrm2
+      - libxdamage1
+      - libxrandr2
+      - libxcomposite1
+      - libxfixes3
+      - libatk1.0-0
+      - libcups2
+      - libdbusmenu-gtk3-4
+      - libproxy1-plugin-gsettings
+      - liboss4-salsa2
+    prime:
+      - -usr/share/doc
+
